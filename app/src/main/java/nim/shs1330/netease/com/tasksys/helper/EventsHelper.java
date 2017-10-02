@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import nim.shs1330.netease.com.tasksys.annotation.Subscribe;
 import nim.shs1330.netease.com.tasksys.annotation.ThreadMode;
 import nim.shs1330.netease.com.tasksys.poster.AsyncPoster;
+import nim.shs1330.netease.com.tasksys.poster.BackgroundPoster;
 import nim.shs1330.netease.com.tasksys.poster.ExecuteCommand;
 import nim.shs1330.netease.com.tasksys.poster.MainPoster;
 
@@ -46,6 +47,8 @@ public class EventsHelper {
     private MainPoster mainPoster = new MainPoster(Looper.getMainLooper());
     //异步事件分发送者，不管当前线程状态始终在子线程中执行
     private AsyncPoster asyncPoster = new AsyncPoster(this);
+    //后台事件的分发者，内部是一个在做自旋的线程
+    private BackgroundPoster backgroundPoster = new BackgroundPoster(this);
 
     //在接受消息的类中注册
     public void register(Object o) {
@@ -178,7 +181,7 @@ public class EventsHelper {
                 //当前线程为主线则子线程调用，当前线程为子线程直接调用
                 ExecuteCommand asyncCommand = new ExecuteCommand(body, event, method);
                 if (getEventHelperState().isMainThread) {
-                    asyncPoster.sendMessage(asyncCommand);
+                    backgroundPoster.sendMessage(asyncCommand);
                 } else {
                     asyncCommand.exeSu();
                 }
