@@ -1,5 +1,7 @@
 package nim.shs1330.netease.com.tasksys.helper;
 
+import android.content.Context;
+
 import java.util.HashMap;
 
 /**
@@ -8,7 +10,11 @@ import java.util.HashMap;
 
 public class Client {
     //功能类单例的管理类
+    private static Context context;
     private static HashMap<Class<?>, Object> helpers = new HashMap<>();
+    public static void init(Context context){
+        Client.context = context;
+    }
     public static <T> T getHelper(Class<T> tClass){
         if (helpers == null){
             helpers = new HashMap<>();
@@ -27,5 +33,9 @@ public class Client {
         }
 
         return target;
+    }
+
+    public static Context getContext() {
+        return context;
     }
 }
