@@ -6,6 +6,9 @@ import android.os.IInterface;
 import android.os.Parcel;
 import android.os.RemoteException;
 
+import nim.shs1330.netease.com.tasksys.helper.Client;
+import nim.shs1330.netease.com.tasksys.helper.LogThreadNameUtil;
+
 /**
  * Created by shs1330 on 2017/10/9.
  */
@@ -20,6 +23,8 @@ public abstract class ComponentNative extends Binder implements Component {
 
     public static Component asInterface(IBinder obj) {
         if (obj == null) {
+            Client.getHelper(LogThreadNameUtil.class)
+                    .printThreadName();
             return null;
         }
         IInterface iin = obj.queryLocalInterface(NAME);

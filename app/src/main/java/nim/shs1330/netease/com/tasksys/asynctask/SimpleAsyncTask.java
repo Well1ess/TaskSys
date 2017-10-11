@@ -18,7 +18,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 public abstract class SimpleAsyncTask<Params, Progress, Result> {
+    private static final String TAG = "SimpleAsyncTask";
 
+    public static final int TASK_COMPLETE = 0x11;
     public static final int coreNum = Runtime.getRuntime().availableProcessors();
     public static final int CORE_THREAD_NUM = Math.max(2, Math.min(coreNum - 1, 4));
     public static final int MAX_THREAD_NUM = coreNum * 2 + 1;
@@ -26,6 +28,7 @@ public abstract class SimpleAsyncTask<Params, Progress, Result> {
     private static final BlockingDeque<Runnable> TASK_QUENE = new LinkedBlockingDeque<>(128);
     public static final ThreadFactory THREAD_FACTORY = new ThreadFactory() {
         private AtomicInteger mCount = new AtomicInteger(1);
+
         @Override
         public Thread newThread(@NonNull Runnable r) {
             return new Thread(r, "#SimpleAsyncTask " + mCount.getAndIncrement());
@@ -46,27 +49,78 @@ public abstract class SimpleAsyncTask<Params, Progress, Result> {
         }
     };
 
-    public static final Handler handler = new Handler(Looper.getMainLooper()){
-        public static final int TASK_COMPLETE = 0x11;
+    public static final Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            SimpleAsyncTask asyncTask = (SimpleAsyncTask) msg.obj;
-            switch (msg.what){
+            AsyncResult asyncTask = (AsyncResult) msg.obj;
+            switch (msg.what) {
                 case TASK_COMPLETE:
-                    asyncTask.postExecute(null);
+                    asyncTask.getTask().postExecute(asyncTask.result);
                     break;
             }
             super.handleMessage(msg);
         }
     };
 
-    protected abstract void preExecute(Params... params);
+    private Task task;
+
+    public SimpleAsyncTask() {
+        task = new Task(this);
+    }
+
+    protected abstract void preExecute();
 
     protected abstract Result doInBackground(Params... params);
 
     protected abstract void postExecute(Result result);
 
     public void execute(Params... params) {
+        executeInExecutor(defaultThreadPool, params);
+    }
 
+    public void executeInExecutor(Executor executor, Params... params){
+        preExecute();
+        task.setParams(params);
+        executor.execute(task);
+    }
+
+    public static class AsyncResult{
+        private SimpleAsyncTask task;
+        private Object result;
+
+        public AsyncResult(SimpleAsyncTask task, Object result) {
+            this.task = task;
+            this.result = result;
+        }
+
+        public SimpleAsyncTask getTask() {
+            return task;
+        }
+
+        public Object getResult() {
+            return result;
+        }
+    }
+
+    public static class Task implements Runnable{
+        private SimpleAsyncTask simpleAsyncTask;
+        private Object[] params;
+        public Task(SimpleAsyncTask asyncTask) {
+            simpleAsyncTask = asyncTask;
+        }
+
+        public void setParams(Object... params){
+            this.params = params;
+        }
+
+        @Override
+        public void run() {
+            Object result = simpleAsyncTask.doInBackground(params);
+            AsyncResult asyncResult = new AsyncResult(simpleAsyncTask, result);
+            Message message = new Message();
+            message.obj = asyncResult;
+            message.what = TASK_COMPLETE;
+            SimpleAsyncTask.handler.sendMessage(message);
+        }
     }
 }
