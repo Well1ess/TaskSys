@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import nim.shs1330.netease.com.tasksys.binder.Component;
 import nim.shs1330.netease.com.tasksys.binder.ComponentNative;
@@ -37,6 +38,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }, 2000);
+
+        findViewById(R.id.bt_showTask).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MainActivity.class));
+            }
+        });
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        unbindService(serviceConnection);
+        super.onDestroy();
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -50,6 +65,4 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
-
-
 }
