@@ -7,13 +7,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.Process;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
-import nim.shs1330.netease.com.tasksys.asynctask.AsyncTaskTest;
 import nim.shs1330.netease.com.tasksys.binder.Component;
 import nim.shs1330.netease.com.tasksys.binder.ComponentNative;
 
@@ -35,12 +32,11 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     component.printProcessName(1000);
-                    System.out.println(Process.myPid());
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
             }
-        }, 1000);
+        }, 2000);
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {

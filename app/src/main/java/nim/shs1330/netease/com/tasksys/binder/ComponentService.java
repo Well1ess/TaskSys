@@ -1,6 +1,5 @@
 package nim.shs1330.netease.com.tasksys.binder;
 
-import android.os.Process;
 import android.os.RemoteException;
 
 /**
@@ -10,6 +9,6 @@ import android.os.RemoteException;
 public class ComponentService extends ComponentNative {
     @Override
     public void printProcessName(int a) throws RemoteException {
-        System.out.println(a + ":" + Process.myPid());
+        System.out.println("调用的是Service的本地方法，远程方法调用，上一个方法是onTransact！");
     }
 }

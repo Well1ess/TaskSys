@@ -14,6 +14,11 @@ public class MainService extends Service {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    @Override
     public IBinder onBind(Intent intent) {
         return componentService;
     }

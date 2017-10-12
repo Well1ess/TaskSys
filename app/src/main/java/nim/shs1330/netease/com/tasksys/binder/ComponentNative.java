@@ -63,6 +63,7 @@ public abstract class ComponentNative extends Binder implements Component {
 
         @Override
         public void printProcessName(int a) throws RemoteException {
+            System.out.println("调用的是代理的方法！");
             Parcel data = Parcel.obtain();
             Parcel reply = Parcel.obtain();
             try {

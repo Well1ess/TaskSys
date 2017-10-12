@@ -25,6 +25,12 @@
             android:process=":second"
             android:enabled="true"
             android:exported="true"></service>
+        <receiver android:name=".receiver.LaunchActivity">
+            <intent-filter>
+                <action
+                    android:name="InvokeActivity"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
