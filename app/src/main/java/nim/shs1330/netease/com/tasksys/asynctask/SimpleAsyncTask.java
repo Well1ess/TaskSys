@@ -21,6 +21,8 @@ public abstract class SimpleAsyncTask<Params, Progress, Result> {
     private static final String TAG = "SimpleAsyncTask";
 
     public static final int TASK_COMPLETE = 0x11;
+    public static final int TASK_PROGRESS = 0x12;
+
     public static final int coreNum = Runtime.getRuntime().availableProcessors();
     public static final int CORE_THREAD_NUM = Math.max(2, Math.min(coreNum - 1, 4));
     public static final int MAX_THREAD_NUM = coreNum * 2 + 1;
@@ -35,12 +37,16 @@ public abstract class SimpleAsyncTask<Params, Progress, Result> {
         }
     };
 
-    public static final Executor threadPoolExecutor = new ThreadPoolExecutor(CORE_THREAD_NUM,
+
+    public static final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(CORE_THREAD_NUM,
             MAX_THREAD_NUM,
             ALIVE_TIME,
             TimeUnit.SECONDS,
             TASK_QUENE,
             THREAD_FACTORY);
+    static {
+        threadPoolExecutor.allowCoreThreadTimeOut(true);
+    }
 
     public static final Executor defaultThreadPool = new Executor() {
         @Override
@@ -49,7 +55,7 @@ public abstract class SimpleAsyncTask<Params, Progress, Result> {
         }
     };
 
-    public static final Handler handler = new Handler(Looper.getMainLooper()) {
+    protected static final Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             AsyncResult asyncTask = (AsyncResult) msg.obj;
@@ -57,6 +63,8 @@ public abstract class SimpleAsyncTask<Params, Progress, Result> {
                 case TASK_COMPLETE:
                     asyncTask.getTask().postExecute(asyncTask.result);
                     break;
+                case TASK_PROGRESS:
+                    asyncTask.getTask().updateProgress(asyncTask.result);
             }
             super.handleMessage(msg);
         }
@@ -74,6 +82,8 @@ public abstract class SimpleAsyncTask<Params, Progress, Result> {
 
     protected abstract void postExecute(Result result);
 
+    protected abstract void updateProgress(Progress value);
+
     public void execute(Params... params) {
         executeInExecutor(defaultThreadPool, params);
     }
@@ -82,6 +92,15 @@ public abstract class SimpleAsyncTask<Params, Progress, Result> {
         preExecute();
         task.setParams(params);
         executor.execute(task);
+    }
+
+    protected void publishProgress(Progress value){
+        Object result = value;
+        AsyncResult asyncResult = new AsyncResult(this, result);
+        Message message = new Message();
+        message.obj = asyncResult;
+        message.what = TASK_PROGRESS;
+        SimpleAsyncTask.handler.sendMessage(message);
     }
 
     public static class AsyncResult{
