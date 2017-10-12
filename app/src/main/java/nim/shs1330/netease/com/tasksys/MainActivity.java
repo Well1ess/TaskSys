@@ -11,7 +11,9 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import nim.shs1330.netease.com.tasksys.asynctask.AsyncTaskTest;
 import nim.shs1330.netease.com.tasksys.binder.Component;
 import nim.shs1330.netease.com.tasksys.binder.ComponentNative;
 
@@ -20,14 +22,13 @@ import nim.shs1330.netease.com.tasksys.binder.ComponentNative;
  */
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = "MainActivity";
     private Component component;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         bindService(new Intent(this, MainService.class), serviceConnection, BIND_AUTO_CREATE);
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override

@@ -8,8 +8,8 @@ import android.util.Log;
  */
 
 public class LogThreadNameUtil {
-    private static final String TAG = "ThreadNameUtil";
     public void printThreadName(){
-        Log.d(TAG, "printThreadName: " + Thread.currentThread().getStackTrace()[0].getMethodName());
+        Log.d("printThreadName",
+                Thread.currentThread().getName());
     }
 }
