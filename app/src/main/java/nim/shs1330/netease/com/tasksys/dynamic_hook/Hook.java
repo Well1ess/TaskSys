@@ -10,8 +10,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 
+import nim.shs1330.netease.com.tasksys.dynamic_hook.ams.AMSHook;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.binder.BinderProxy;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.instrument.ProxyInstrumentation;
+import nim.shs1330.netease.com.tasksys.dynamic_hook.pms.PMSHook;
 
 /**
  * Created by shs1330 on 2017/10/12.
@@ -81,5 +83,19 @@ public class Hook {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * @see AMSHook#amsHook()
+     */
+    public void hookAMS(){
+        AMSHook.amsHook();
+    }
+
+    /**
+     * @see PMSHook#pmsHook()
+     */
+    public void hookPMS(){
+        PMSHook.pmsHook();
     }
 }
