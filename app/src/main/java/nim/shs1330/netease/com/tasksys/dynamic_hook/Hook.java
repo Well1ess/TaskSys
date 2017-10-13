@@ -46,4 +46,8 @@ public class Hook {
             e.printStackTrace();
         }
     }
+
+    public void hookBinder(){
+
+    }
 }
