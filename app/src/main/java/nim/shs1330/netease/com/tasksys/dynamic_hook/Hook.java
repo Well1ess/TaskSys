@@ -1,12 +1,16 @@
 package nim.shs1330.netease.com.tasksys.dynamic_hook;
 
 import android.app.Instrumentation;
+import android.os.IBinder;
 import android.util.Log;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.HashMap;
 
+import nim.shs1330.netease.com.tasksys.dynamic_hook.binder.BinderProxy;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.instrument.ProxyInstrumentation;
 
 /**
@@ -47,7 +51,35 @@ public class Hook {
         }
     }
 
+    /**
+     * Hook时应当注意，使用java反射时静态方法TargetObject为null
+     * Field静态字段TargetObject为null
+     * {@link Class#getDeclaredMethod(String, Class[])}，
+     * {@link Class#getDeclaredField(String)}是这个类的所有字段，
+     * 使用时{@link Method#setAccessible(boolean)}
+     * 使用时{@link Field#setAccessible(boolean)}
+     * {@link Class#getField(String)},{@link Class#getMethod(String, Class[])}返回该类的public方法
+     */
     public void hookBinder(){
-
+        try {
+            Class clz = Class.forName("android.os.ServiceManager");
+            try {
+                Field sCache = clz.getDeclaredField("sCache");
+                sCache.setAccessible(true);
+                HashMap<String, IBinder> cache = (HashMap<String, IBinder>) sCache.get(null);
+                IBinder rawBinder = cache.get("clipboard");
+                IBinder hookedBinder = (IBinder) Proxy.newProxyInstance(clz.getClassLoader(),
+                        new Class[]{IBinder.class},
+                        new BinderProxy(rawBinder));
+                cache.put("clipboard", hookedBinder);
+                sCache.set(null, cache);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

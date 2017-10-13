@@ -11,10 +11,10 @@ import java.lang.reflect.Method;
 
 public class AsInterface {
     public static Object createBase(IBinder base, Class<?> clz) throws NoSuchMethodException {
-        Method method = clz.getMethod("asInterface", IBinder.class);
+        Method method = clz.getDeclaredMethod("asInterface", IBinder.class);
         method.setAccessible(true);
         try {
-            return method.invoke(base);
+            return method.invoke(null, base);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

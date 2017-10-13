@@ -105,7 +105,7 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent">
-        <TextView
+        <EditText
             android:id="@+id/tv_des"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -113,6 +113,7 @@
             android:background="#FFFFFF"
             android:gravity="left|top"
             android:textStyle="bold"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:text="asdasdasdasdasdasdasdasdasdasdas"/>
     </ScrollView>
 </LinearLayout>

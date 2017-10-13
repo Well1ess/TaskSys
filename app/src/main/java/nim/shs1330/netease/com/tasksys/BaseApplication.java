@@ -21,5 +21,6 @@ public class BaseApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         Client.getHelper(Hook.class).hook();
+        Client.getHelper(Hook.class).hookBinder();
     }
 }
