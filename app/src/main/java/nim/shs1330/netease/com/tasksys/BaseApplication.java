@@ -21,7 +21,6 @@ public class BaseApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         //hookInstrumentation
-
         Client.getHelper(Hook.class).hook();
         //hook ClipBoard IBinder
         Client.getHelper(Hook.class).hookBinder();
