@@ -1,5 +1,6 @@
 package nim.shs1330.netease.com.tasksys.dynamic_hook.ams;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.util.Log;
 
@@ -8,11 +9,13 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+import nim.shs1330.netease.com.tasksys.dynamic_hook.activity.StubActivity;
+
 /**
  * Created by shs1330 on 2017/10/13.
  * <p>
  * ActivityManagerService是个系统服务，底层使用是
- * {@link android.app.ActivityManagerNative#getDefault 单例}
+ * {@linkandroid.app.ActivityManagerNative#getDefault 单例}
  * AMS主要用于管理四大组件的生命周期
  * AMS在framework的system_server进程中管理所有“活动”，这样开发人员更方便的使用四大组件
  * 而AppThread就是App process和system_server进程通信的桥梁
@@ -51,6 +54,7 @@ import java.lang.reflect.Proxy;
  * }
  */
 public class AMSHook implements InvocationHandler {
+    public static final String TARGET_ACTIVITY = "TARGET_ACTIVITY";
     private static final String TAG = "AMSHook";
     private Object mBaseAms;
 
@@ -72,6 +76,26 @@ public class AMSHook implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Log.d(TAG, method.getName());
+        if (method.getName().equals("startActivity")) {
+            Intent rawIntent = null;
+            int index = 0;
+            for (int i = 0; i < args.length; i++) {
+                if (args[i] instanceof Intent) {
+                    rawIntent = (Intent) args[i];
+                    index = i;
+                    break;
+                }
+            }
+
+            String packageName = "nim.shs1330.netease.com.tasksys";
+            ComponentName c = new ComponentName(packageName, StubActivity.class.getCanonicalName());
+            Intent newIntent = new Intent();
+            newIntent.setComponent(c);
+            Log.d(TAG, "invoke: " + rawIntent);
+            newIntent.putExtra(TARGET_ACTIVITY, rawIntent);
+
+            args[index] = newIntent;
+        }
         return method.invoke(mBaseAms, args);
     }
 

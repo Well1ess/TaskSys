@@ -24,5 +24,6 @@ public class BaseApplication extends Application {
         Client.getHelper(Hook.class).hookBinder();
         Client.getHelper(Hook.class).hookAMS();
         Client.getHelper(Hook.class).hookPMS();
+        Client.getHelper(Hook.class).hookHandler();
     }
 }

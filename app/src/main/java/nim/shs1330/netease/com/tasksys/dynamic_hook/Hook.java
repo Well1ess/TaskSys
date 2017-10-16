@@ -1,6 +1,7 @@
 package nim.shs1330.netease.com.tasksys.dynamic_hook;
 
 import android.app.Instrumentation;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -12,6 +13,7 @@ import java.util.HashMap;
 
 import nim.shs1330.netease.com.tasksys.dynamic_hook.ams.AMSHook;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.binder.BinderProxy;
+import nim.shs1330.netease.com.tasksys.dynamic_hook.callback.ActivityThreadCallback;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.instrument.ProxyInstrumentation;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.pms.PMSHook;
 
@@ -97,5 +99,32 @@ public class Hook {
      */
     public void hookPMS(){
         PMSHook.pmsHook();
+    }
+
+    /**
+     * hook ActivityThread mH mCallback
+     */
+    public void hookHandler(){
+        try {
+            Class atclz = Class.forName("android.app.ActivityThread");
+            Field currentActivityThreadF= atclz.getDeclaredField("sCurrentActivityThread");
+            currentActivityThreadF.setAccessible(true);
+            Object activityThread = currentActivityThreadF.get(null);
+
+            Field mHF = atclz.getDeclaredField("mH");
+            mHF.setAccessible(true);
+            Object mH = mHF.get(activityThread);
+
+            Field mCallbackF = Handler.class.getDeclaredField("mCallback");
+            mCallbackF.setAccessible(true);
+            mCallbackF.set(mH, new ActivityThreadCallback((Handler) mH));
+            Log.d(TAG, "hookHandler: "+ "GGG");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
 }

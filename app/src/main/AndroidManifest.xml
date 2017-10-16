@@ -20,16 +20,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".dynamic_hook.activity.StubActivity" />
 
         <service
             android:name=".MainService"
-            android:process=":second"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"
+            android:process=":second"></service>
         <receiver android:name=".receiver.LaunchActivity">
             <intent-filter>
-                <action
-                    android:name="InvokeActivity"/>
+                <action android:name="InvokeActivity" />
             </intent-filter>
         </receiver>
     </application>
