@@ -20,10 +20,15 @@ public class BaseApplication extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        //hookInstrumentation
         Client.getHelper(Hook.class).hook();
+        //hook ClipBoard IBinder
         Client.getHelper(Hook.class).hookBinder();
+        //hook ActivityManagerService
         Client.getHelper(Hook.class).hookAMS();
+        //hook PackageManagerService
         Client.getHelper(Hook.class).hookPMS();
+        //hook ActivityThread H mCallback
         Client.getHelper(Hook.class).hookHandler();
     }
 }
