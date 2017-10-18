@@ -1,5 +1,7 @@
 package nim.shs1330.netease.com.tasksys.dynamic_hook.classloader;
 
+import android.os.Message;
+
 import dalvik.system.DexClassLoader;
 
 /**
@@ -7,11 +9,13 @@ import dalvik.system.DexClassLoader;
  * Description:
  * ClassLoader机制
  * 具体思路ActivityThread中的performLaunchActivity方法通过反射new一个Activity，
- * 往上一层是handleLaunchActivity new一个ActivityInfoRecord，AIR.appInfo = LoadedApk,这个AIR里面有个LoadedApk，就是它里面的classLoader
- * 加载Activity的类。
- * 每一个不同的包对应一个LoadedApk，里面有一个Map有PackageName和LoadedApk的对应关系。
+ * 往上一层是handleLaunchActivity,再往上一层是H的{@link android.os.Handler#handleMessage(Message)}中生成
+ * LoadedApk，
+ * ActivityClientRecord.packageInfo = LoadedApk,
+ * LoadedApk，就是它里面的classLoader加载Activity的类。
+ * 每一个不同的包对应一个LoadedApk，Actvity里面有一个Map存放PackageName和LoadedApk的对应关系。
  * 我们可以new自己的classLoader加入对应的Map。
- * ActivityInfoRecord中r.activityInfo.getClassLoader();
+ * ActivityClientRecord中activityInfo.applicationInfo.getClassLoader();
  */
 
 public class CustomClassLoader extends DexClassLoader {
