@@ -24,29 +24,33 @@ import nim.shs1330.netease.com.tasksys.helper.FileHelper;
  */
 public class ClassLoaderHelper {
     private static final String TAG = "ClassLoaderHelper";
-    private static final String ActivityThreadClz = "android.app.ActivityThread";
-    private static final String CompatibilityInfoClz = "android.content.res.CompatibilityInfo";
-
+    //持有apk，防止被GC
     private static Map<String, Object> sLoadedApk = new HashMap<>();
 
     public static void hookCustomClassLoader(File apkFile) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, InstantiationException {
-        Class activityThreadClz = Class.forName(ActivityThreadClz);
+        //获取ActivityThread
+        Class activityThreadClz = Class.forName("android.app.ActivityThread");
+        //访问ActivityThread的方法
         Method currentActivityThreadM = activityThreadClz.getDeclaredMethod("currentActivityThread");
         currentActivityThreadM.setAccessible(true);
+        //ActivityThread对象
         Object activityThread = currentActivityThreadM.invoke(null);
 
         Field mPackagesF = activityThreadClz.getDeclaredField("mPackages");
         mPackagesF.setAccessible(true);
+        //ActivityThread中PackageName和LoadedApk的对应Map
         Map mPackages = (Map) mPackagesF.get(activityThread);
 
-        Method getPackageInfoNoCheck = activityThreadClz.getDeclaredMethod("getPackageInfoNoCheck", ApplicationInfo.class, Class.forName(CompatibilityInfoClz));
+        //获得生成LoadedApk的方法
+        Method getPackageInfoNoCheck = activityThreadClz.getDeclaredMethod("getPackageInfoNoCheck", ApplicationInfo.class, Class.forName("android.content.res.CompatibilityInfo"));
         getPackageInfoNoCheck.setAccessible(true);
 
-
+        //生成LoadedApk必须有对应apk的AndroidManifest.xml的信息
+        //与之对应的是ApplicationInfo
         ApplicationInfo applicationInfo = generateApplication(apkFile);
 
-        Object loadedApk = getPackageInfoNoCheck.invoke(activityThread, applicationInfo,generateCompatibilityInfo());
-
+        Object loadedApk = getPackageInfoNoCheck.invoke(activityThread, applicationInfo, generateCompatibilityInfo());
+        //构造自己的ClassLoader
         CustomClassLoader customClassLoader = new CustomClassLoader(apkFile.getPath(),
                 FileHelper.getOptDir(applicationInfo.packageName).getPath(),
                 FileHelper.getPluginLibDir(applicationInfo.packageName).getPath(),
@@ -83,7 +87,7 @@ public class ClassLoaderHelper {
     }
 
     private static Object generateCompatibilityInfo() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
-        Class CompatibilityInfoClass = Class.forName(CompatibilityInfoClz);
+        Class CompatibilityInfoClass = Class.forName("android.content.res.CompatibilityInfo");
         Field defaultCompatibilityInfoField = CompatibilityInfoClass.getDeclaredField("DEFAULT_COMPATIBILITY_INFO");
         defaultCompatibilityInfoField.setAccessible(true);
         return defaultCompatibilityInfoField.get(null);
