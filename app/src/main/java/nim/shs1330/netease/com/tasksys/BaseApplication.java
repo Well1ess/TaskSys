@@ -15,14 +15,16 @@ import nim.shs1330.netease.com.tasksys.helper.FileHelper;
  */
 
 public class BaseApplication extends Application {
+    private static final String PluginOne = "app-debug.apk";
+
     @Override
     public void onCreate() {
         super.onCreate();
         Client.init(getApplicationContext());
 
-        FileHelper.extractAssets("app-debug.apk");
+        FileHelper.extractAssets(PluginOne);
         try {
-            ClassLoaderHelper.hookCustomClassLoader(getFileStreamPath("app-debug.apk"));
+            ClassLoaderHelper.hookCustomClassLoader(getFileStreamPath(PluginOne));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
