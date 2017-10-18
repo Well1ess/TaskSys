@@ -1,5 +1,6 @@
 package nim.shs1330.netease.com.tasksys;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -9,7 +10,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import nim.shs1330.netease.com.tasksys.binder.Component;
@@ -20,7 +20,7 @@ import nim.shs1330.netease.com.tasksys.dynamic_hook.activity.TargetActivity;
  * Created by shs1330 on 2017/10/10.
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
     private Component component;
 
@@ -44,6 +44,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, TargetActivity.class));
+            }
+        });
+
+        findViewById(R.id.bt_clear).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName("nim.shs1330.netease.com.pluginone",
+                        "nim.shs1330.netease.com.pluginone.MainActivity"));
+                startActivity(intent);
             }
         });
 

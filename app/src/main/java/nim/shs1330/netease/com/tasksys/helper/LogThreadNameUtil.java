@@ -9,7 +9,6 @@ import android.util.Log;
 
 public class LogThreadNameUtil {
     public void printThreadName(){
-        Log.d("printThreadName",
-                Thread.currentThread().getName());
+        Log.d("printThreadName", Thread.currentThread().getName());
     }
 }

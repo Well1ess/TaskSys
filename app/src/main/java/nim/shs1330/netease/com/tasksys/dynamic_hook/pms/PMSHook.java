@@ -2,6 +2,7 @@ package nim.shs1330.netease.com.tasksys.dynamic_hook.pms;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
 import android.util.Log;
 
 import java.lang.reflect.Field;
@@ -35,6 +36,9 @@ public class PMSHook implements InvocationHandler {
         if (method.getName().equals("getActivityInfo")){
             ActivityInfo activityInfo = new ActivityInfo();
             return activityInfo;
+        }
+        if (method.getName().equals("getPackageInfo")) {
+            return new PackageInfo();
         }
         return method.invoke(mBasePms, args);
     }
