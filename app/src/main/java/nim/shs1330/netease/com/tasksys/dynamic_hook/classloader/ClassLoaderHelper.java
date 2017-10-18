@@ -23,6 +23,7 @@ import nim.shs1330.netease.com.tasksys.helper.FileHelper;
  *
  */
 public class ClassLoaderHelper {
+
     private static final String TAG = "ClassLoaderHelper";
     //持有apk，防止被GC
     private static Map<String, Object> sLoadedApk = new HashMap<>();
