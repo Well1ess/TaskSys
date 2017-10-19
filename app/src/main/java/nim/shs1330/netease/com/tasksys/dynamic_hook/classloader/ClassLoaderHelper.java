@@ -28,6 +28,27 @@ public class ClassLoaderHelper {
     //持有apk，防止被GC
     private static Map<String, Object> sLoadedApk = new HashMap<>();
 
+
+    public static void hookParentClassLoader(File apkFile)
+    {
+        //LoadedApk中mClassLoader由BaseDexClassLoader中的Element数组获取生成
+        //我们通过反射构造自己的Apk对应的Element加到BaseDexClassLoader中就可以委托系统帮我
+        //们生成对应的ClassLoader
+
+    }
+
+    /**
+     * 激进的hook方法，每个Apk都有一个与之对应的ClassLoader
+     * 好处是各个插件之间没有耦合，
+     * 坏处是比较麻烦
+     * @param apkFile
+     * @throws ClassNotFoundException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws NoSuchFieldException
+     * @throws InstantiationException
+     */
     public static void hookCustomClassLoader(File apkFile) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, InstantiationException {
         //获取ActivityThread
         Class activityThreadClz = Class.forName("android.app.ActivityThread");
