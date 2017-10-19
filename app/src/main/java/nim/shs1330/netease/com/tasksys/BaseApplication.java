@@ -3,7 +3,7 @@ package nim.shs1330.netease.com.tasksys;
 import android.app.Application;
 import android.content.Context;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.File;
 
 import nim.shs1330.netease.com.tasksys.dynamic_hook.Hook;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.classloader.ClassLoaderHelper;
@@ -23,21 +23,24 @@ public class BaseApplication extends Application {
         Client.init(getApplicationContext());
 
         FileHelper.extractAssets(PluginOne);
-        try {
-            ClassLoaderHelper.hookCustomClassLoader(getFileStreamPath(PluginOne));
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
+        File dexFile = getFileStreamPath(PluginOne);
+        File optDexFile = getFileStreamPath("app-debug.dex");
+        ClassLoaderHelper.hookParentClassLoader(getClassLoader(), dexFile, optDexFile);
+//        try {
+//            ClassLoaderHelper.hookCustomClassLoader(getFileStreamPath(PluginOne));
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
