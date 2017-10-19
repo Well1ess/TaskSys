@@ -17,6 +17,7 @@ import static nim.shs1330.netease.com.tasksys.dynamic_hook.ams.AMSHook.TARGET_AC
  * 如果为空或者返回false在调用handleMessage，我们自己new一个Callback赋值个ActivityThread
  */
 public class ActivityThreadCallback implements Handler.Callback {
+    private static final String TAG = "ActivityThreadCallback";
     private Handler mH;
 
     public ActivityThreadCallback(Handler mH) {
@@ -35,21 +36,25 @@ public class ActivityThreadCallback implements Handler.Callback {
     }
 
     private void handleLaunchActivity(Message msg) {
+
         Object obj = msg.obj;
         try {
             Field intentF = obj.getClass().getDeclaredField("intent");
             intentF.setAccessible(true);
+            //rawIntent 即：我们自行替换为StubActivity的Intent
             Intent raw = (Intent) intentF.get(obj);
-            //*******************************************************************
+            //target 即：我们企图启动的Activity的原始Intent
             Intent target = raw.getParcelableExtra(TARGET_ACTIVITY);
+            //如果为空则表示不是Plugin也不是AndroidManifest里面未声明的
             if (target == null)
                 return;
             raw.setComponent(target.getComponent());
 
             Field activityInfoField = obj.getClass().getDeclaredField("activityInfo");
             activityInfoField.setAccessible(true);
-
+            //ActivityClientRecord成员变量ActivityInfo，表示AndroidManifest.xml中该Activity的信息
             ActivityInfo activityInfo = (ActivityInfo) activityInfoField.get(obj);
+            //修改包名，这样才能和mPackage Map进行映射
             activityInfo.applicationInfo.packageName = target.getPackage() == null ?
                     target.getComponent().getPackageName() : target.getPackage();
 
