@@ -26,6 +26,7 @@ public class BaseApplication extends Application {
         File dexFile = getFileStreamPath(PluginOne);
         File optDexFile = getFileStreamPath("app-debug.dex");
         ClassLoaderHelper.hookParentClassLoader(getClassLoader(), dexFile, optDexFile);
+
 //        try {
 //            ClassLoaderHelper.hookCustomClassLoader(getFileStreamPath(PluginOne));
 //        } catch (ClassNotFoundException e) {

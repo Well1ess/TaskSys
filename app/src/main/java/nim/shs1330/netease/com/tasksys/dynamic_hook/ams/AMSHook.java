@@ -75,7 +75,6 @@ public class AMSHook implements InvocationHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        Log.d(TAG, method.getName());
         if (method.getName().equals("startActivity")) {
             Intent rawIntent = null;
             int index = 0;

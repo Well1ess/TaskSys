@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import java.lang.reflect.Field;
 
@@ -49,7 +50,8 @@ public class ActivityThreadCallback implements Handler.Callback {
             if (target == null)
                 return;
             raw.setComponent(target.getComponent());
-
+            Log.d(TAG, "handleLaunchActivity: " + target);
+            Log.d(TAG, "handleLaunchActivity: " + raw);
             Field activityInfoField = obj.getClass().getDeclaredField("activityInfo");
             activityInfoField.setAccessible(true);
             //ActivityClientRecord成员变量ActivityInfo，表示AndroidManifest.xml中该Activity的信息
