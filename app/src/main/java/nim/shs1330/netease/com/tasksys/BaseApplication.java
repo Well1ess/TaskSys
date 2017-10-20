@@ -3,12 +3,11 @@ package nim.shs1330.netease.com.tasksys;
 import android.app.Application;
 import android.content.Context;
 
-import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 
 import nim.shs1330.netease.com.tasksys.dynamic_hook.Hook;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.classloader.ClassLoaderHelper;
 import nim.shs1330.netease.com.tasksys.helper.Client;
-import nim.shs1330.netease.com.tasksys.helper.FileHelper;
 
 /**
  * Created by shs1330 on 2017/10/11.
@@ -22,26 +21,26 @@ public class BaseApplication extends Application {
         super.onCreate();
         Client.init(getApplicationContext());
 
-        FileHelper.extractAssets(PluginOne);
-        File dexFile = getFileStreamPath(PluginOne);
-        File optDexFile = getFileStreamPath("app-debug.dex");
-        ClassLoaderHelper.hookParentClassLoader(getClassLoader(), dexFile, optDexFile);
+//        FileHelper.extractAssets(PluginOne);
+//        File dexFile = getFileStreamPath(PluginOne);
+//        File optDexFile = getFileStreamPath("app-debug.dex");
+//        ClassLoaderHelper.hookParentClassLoader(getClassLoader(), dexFile, optDexFile);
 
-//        try {
-//            ClassLoaderHelper.hookCustomClassLoader(getFileStreamPath(PluginOne));
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchMethodException e) {
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        } catch (InstantiationException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            ClassLoaderHelper.hookCustomClassLoader(getFileStreamPath(PluginOne));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
