@@ -32,7 +32,17 @@ public class ClassLoaderHelper {
     private static final String TAG = "ClassLoaderHelper";
     //持有apk，防止被GC
     private static Map<String, Object> sLoadedApk = new HashMap<>();
+    private static Map<String, ClassLoader> sPluginClassLoader = new HashMap<>();
 
+    /**
+     * 获取对应的Classloader
+     * @param apkName
+     * @return
+     */
+    public static ClassLoader getPluginClassLoader(String apkName)
+    {
+        return sPluginClassLoader.get(apkName);
+    }
 
     public static void hookParentClassLoader(ClassLoader classLoader, File apkFile, File optDex)
     {
@@ -126,6 +136,7 @@ public class ClassLoaderHelper {
         mClassLoaderFieldF.setAccessible(true);
         mClassLoaderFieldF.set(loadedApk, customClassLoader);
 
+        sPluginClassLoader.put(applicationInfo.packageName, customClassLoader);
         sLoadedApk.put(applicationInfo.packageName, loadedApk);
         mPackages.put(applicationInfo.packageName, new WeakReference(loadedApk));
 
