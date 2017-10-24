@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.Hook;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.classloader.ClassLoaderHelper;
 import nim.shs1330.netease.com.tasksys.helper.Client;
+import nim.shs1330.netease.com.tasksys.helper.FileHelper;
 
 /**
  * Created by shs1330 on 2017/10/11.
@@ -21,7 +22,7 @@ public class BaseApplication extends Application {
         super.onCreate();
         Client.init(getApplicationContext());
 
-//        FileHelper.extractAssets(PluginOne);
+        FileHelper.extractAssets(PluginOne);
 //        File dexFile = getFileStreamPath(PluginOne);
 //        File optDexFile = getFileStreamPath("app-debug.dex");
 //        ClassLoaderHelper.hookParentClassLoader(getClassLoader(), dexFile, optDexFile);
