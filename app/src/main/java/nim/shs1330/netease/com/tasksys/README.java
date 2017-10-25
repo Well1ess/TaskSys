@@ -10,3 +10,11 @@ package nim.shs1330.netease.com.tasksys;
  * 2017年10月23日17:39:43
  * 对于广播的注册，插件中的静态广播也作为动态广播注册，动态添加IntentFilter
  */
+
+/**
+ * 2017年10月25日10:51:07
+ * 对于借尸还魂这种hookActivity的方式是有侵入的，我们需要修改大量的AMS，PMS，ActivityThread里面的变量。
+ *
+ * 对于DL的方式，其将host中的ProxyActivity（插件Activity的host代理）传入到plugin中然后在plugin中对这个ProxyActivity进行
+ * 操作，展示给用户，这种方式是无侵入的
+ */
