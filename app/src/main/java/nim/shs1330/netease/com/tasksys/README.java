@@ -18,3 +18,9 @@ package nim.shs1330.netease.com.tasksys;
  * 对于DL的方式，其将host中的ProxyActivity（插件Activity的host代理）传入到plugin中然后在plugin中对这个ProxyActivity进行
  * 操作，展示给用户，这种方式是无侵入的
  */
+
+/**
+ * 2017年10月27日09:34:03
+ * 无侵入的插件化其实还是调用的宿主的一些方法，使用宿主的Context，所以插件中无法使用R开头访问资源
+ * 有侵入事实上就是插件自己的App的Context所以可以访问资源
+ */
