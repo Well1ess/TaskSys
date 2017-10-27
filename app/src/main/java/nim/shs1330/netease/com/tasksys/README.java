@@ -22,5 +22,10 @@ package nim.shs1330.netease.com.tasksys;
 /**
  * 2017年10月27日09:34:03
  * 无侵入的插件化其实还是调用的宿主的一些方法，使用宿主的Context，所以插件中无法使用R开头访问资源
- * 有侵入事实上就是插件自己的App的Context所以可以访问资源
+ * 有侵入事实上就是插件自己的App的Context所以可以访问资源，
+ *
+ * 有侵入的plugin为什么能访问资源呢？
+ * 访问资源和Resource这个类有关，和Context的getAssets()方法有关，ContextImpl是的实现类，我们在ActivityThread
+ * 中看到在createContext时候自动生成Resource，生成它是根据packageInfo（LoadedApk）生成的所以。。。，而LoadedApk
+ * 是我们createContext传给他的对应插件的apk
  */
