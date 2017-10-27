@@ -29,3 +29,10 @@ package nim.shs1330.netease.com.tasksys;
  * 中看到在createContext时候自动生成Resource，生成它是根据packageInfo（LoadedApk）生成的所以。。。，而LoadedApk
  * 是我们createContext传给他的对应插件的apk
  */
+
+/**
+ * 很多坑，
+ * 2017年10月27日16:40:09
+ * 插件里的application要首先启动一下再生产，所以直接调用插件中的fragment不能加载插件中的资源，于是我们自己new application然后
+ * 导入到loaderapk中（ApplicationInfo）
+ */

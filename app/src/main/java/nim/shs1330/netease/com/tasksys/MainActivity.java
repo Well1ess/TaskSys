@@ -1,5 +1,7 @@
 package nim.shs1330.netease.com.tasksys;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -12,9 +14,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import nim.shs1330.netease.com.tasksys.binder.Component;
 import nim.shs1330.netease.com.tasksys.binder.ComponentNative;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.activity.TargetActivity;
+import nim.shs1330.netease.com.tasksys.dynamic_hook.classloader.ClassLoaderHelper;
 
 /**
  * Created by shs1330 on 2017/10/10.
@@ -57,6 +63,39 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.bt_task1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                Fragment fragment = null;
+                StubFragment stubFragment = null;
+                try {
+                    ClassLoader classLoader = ClassLoaderHelper.getPluginClassLoader("nim.shs1330.netease.com.plugintwp");
+                    Class fragmentClazz =  classLoader.loadClass("nim.shs1330.netease.com.plugintwp.MainFragment");
+                    fragment = (Fragment) fragmentClazz.newInstance();
+
+                    stubFragment = new StubFragment();
+                    stubFragment.setRemoteFragment(fragment);
+
+                    Method setProxyFragmentF = fragmentClazz.getDeclaredMethod("setProxyFragment", Fragment.class);
+                    setProxyFragmentF.setAccessible(true);
+                    setProxyFragmentF.invoke(fragment, stubFragment);
+
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                transaction.replace(R.id.flyt_contrainer, stubFragment);
+                transaction.commit();
+            }
+        });
     }
 
 

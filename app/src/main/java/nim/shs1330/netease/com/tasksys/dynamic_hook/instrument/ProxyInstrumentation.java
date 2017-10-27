@@ -1,6 +1,7 @@
 package nim.shs1330.netease.com.tasksys.dynamic_hook.instrument;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +44,23 @@ public class ProxyInstrumentation extends Instrumentation {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void callApplicationOnCreate(Application app) {
+        if (!app.getApplicationInfo().packageName.equals("nim.shs1330.netease.com.tasksys")){
+            try {
+                Method setHostContextM = app.getClass().getDeclaredMethod("setHostContext", Context.class);
+                setHostContextM.setAccessible(true);
+                setHostContextM.invoke(app, Client.getContext());
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        super.callApplicationOnCreate(app);
     }
 
     public void callActivityOnCreate(Activity activity, Bundle icicle)
