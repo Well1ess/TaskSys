@@ -20,6 +20,7 @@ import java.util.Map;
 
 import dalvik.system.DexClassLoader;
 import dalvik.system.DexFile;
+import nim.shs1330.netease.com.tasksys.dynamic_hook.application.ApplicationInit;
 import nim.shs1330.netease.com.tasksys.helper.FileHelper;
 
 /**
@@ -44,6 +45,16 @@ public class ClassLoaderHelper {
         return sPluginClassLoader.get(apkName);
     }
 
+    public static Object getLoadedApk(String apkName){
+        return sLoadedApk.get(apkName);
+    }
+
+    /**
+     * @deprecated
+     * @param classLoader
+     * @param apkFile
+     * @param optDex
+     */
     public static void hookParentClassLoader(ClassLoader classLoader, File apkFile, File optDex)
     {
         //LoadedApk中mClassLoader由BaseDexClassLoader中的Element数组获取生成
@@ -140,6 +151,8 @@ public class ClassLoaderHelper {
         sLoadedApk.put(applicationInfo.packageName, loadedApk);
         mPackages.put(applicationInfo.packageName, new WeakReference(loadedApk));
 
+        //直接初始化Application对象
+        ApplicationInit.CreatePluginApplication(applicationInfo.packageName);
         Log.d(TAG, "plugin: " + applicationInfo.packageName);
     }
 
