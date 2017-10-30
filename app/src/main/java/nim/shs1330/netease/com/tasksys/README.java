@@ -26,7 +26,7 @@ package nim.shs1330.netease.com.tasksys;
  * 很多坑，
  * 2017年10月27日16:40:09
  * 插件里的application要首先启动一下再生产，所以直接调用插件中的fragment不能加载插件中的资源，于是我们自己new application然后
- * 导入到loaderapk中（ApplicationInfo）
+ * 导入到loadedApk中（ApplicationInfo）
  * <p>
  * 2017年10月30日13:04:48
  * 无侵入的DL框架

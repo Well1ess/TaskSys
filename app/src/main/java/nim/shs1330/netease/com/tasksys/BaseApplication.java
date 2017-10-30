@@ -3,10 +3,12 @@ package nim.shs1330.netease.com.tasksys;
 import android.app.Application;
 import android.content.Context;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import nim.shs1330.netease.com.tasksys.dynamic_hook.Hook;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.classloader.ClassLoaderHelper;
+import nim.shs1330.netease.com.tasksys.dynamic_hook.json.JSONParser;
 import nim.shs1330.netease.com.tasksys.helper.Client;
 import nim.shs1330.netease.com.tasksys.helper.FileHelper;
 
@@ -26,6 +28,13 @@ public class BaseApplication extends Application {
 //        File dexFile = getFileStreamPath(PluginOne);
 //        File optDexFile = getFileStreamPath("app-debug.dex");
 //        ClassLoaderHelper.hookParentClassLoader(getClassLoader(), dexFile, optDexFile);
+
+        try {
+            JSONParser.parser();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         try {
             ClassLoaderHelper.hookCustomClassLoader(getFileStreamPath(PluginOne));

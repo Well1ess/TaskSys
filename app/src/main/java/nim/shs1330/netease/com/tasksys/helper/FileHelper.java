@@ -20,7 +20,7 @@ public class FileHelper {
 
     /**
      * 将文件从assets复制到
-     * @param sourceName data/data/<packagename>/files文件夹下
+     * @param sourceName data/data/<packagename>/files/sourceName文件夹下
      */
     public static void extractAssets(String sourceName){
         AssetManager am = Client.getContext().getAssets();
@@ -53,7 +53,7 @@ public class FileHelper {
     /**
      * 返回对应plugin包名路径下的基础路径
      * @param packageName
-     * @return data/data/<packageName>/plugin/<PlugInPackageName>
+     * @return data/data/<packageName>/files/plugin/<PlugInPackageName>
      */
     public static File getBasePluginDir(String packageName)
     {
@@ -67,7 +67,7 @@ public class FileHelper {
     /**
      * 返回opt file
      * @param packagName
-     * @return data/data/<packageName>/plugin/<PlugInPackageName>/odex
+     * @return data/data/<packageName>/files/plugin/<PlugInPackageName>/odex
      */
     public static File getOptDir(String packagName){
         return  enforeFileExists(new File(getBasePluginDir(packagName), "odex"));
@@ -76,7 +76,7 @@ public class FileHelper {
     /**
      *
      * @param packagName
-     * @return data/data/<packageName>/plugin/<PlugInPackageName>/lib
+     * @return data/data/<packageName>/files/plugin/<PlugInPackageName>/lib
      */
     public static File getPluginLibDir(String packagName){
         return  enforeFileExists(new File(getBasePluginDir(packagName), "lib"));
