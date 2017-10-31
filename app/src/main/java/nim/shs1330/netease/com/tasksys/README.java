@@ -34,4 +34,7 @@ package nim.shs1330.netease.com.tasksys;
  * Host和Plugin全部都依赖于这个lib Interface，
  * 当host的intent进行startActivity的时候，注入其他extra的信息，在proxyActivity的onCreate方法里面接受到该intent，
  * 随后引入DLManager处理，在此manager中处理插件activity的启动数据注入等。
+ *
+ * 2017年10月31日14:06:27
+ * 在插件中用host的context注册广播就可正常接收信息
  */
