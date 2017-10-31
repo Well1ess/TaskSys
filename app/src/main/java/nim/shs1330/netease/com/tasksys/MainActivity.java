@@ -96,6 +96,16 @@ public class MainActivity extends AppCompatActivity {
                 transaction.commit();
             }
         });
+
+        findViewById(R.id.bt_task2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction("plugtwo");
+                intent.putExtra("text", "ZZZ");
+                sendBroadcast(intent);
+            }
+        });
     }
 
 

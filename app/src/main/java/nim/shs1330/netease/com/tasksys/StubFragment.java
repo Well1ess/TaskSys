@@ -32,4 +32,10 @@ public class StubFragment extends Fragment {
         } else
             return null;
     }
+
+    @Override
+    public void onDestroy() {
+        remoteFragment.onDestroy();
+        super.onDestroy();
+    }
 }
