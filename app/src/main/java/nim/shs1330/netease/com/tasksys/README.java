@@ -37,4 +37,12 @@ package nim.shs1330.netease.com.tasksys;
  *
  * 2017年10月31日14:06:27
  * 在插件中用host的context注册广播就可正常接收信息
+ *
+ * 2017年11月1日10:46:03
+ * Activity和Service有很多相同点也有很多不同点
+ * 他们都是四大组件，都通过AMS管理生命周期，但是Activity的生命周期由用户触发，由系统管理，Service的生命周期一般由我们代码控制，
+ * 除非内存吃紧。
+ * Service的实例在start方式下只调用一次，而且Service有可能会在一个新的进程中，这导致Activity和Servicehook机制不能通用的原因
+ * 具体我们自己保存一个map来模仿startService，我们在AndroidManifest里面生命五个不同进程的Service和一个ProxyService，所有Service
+ * 的启动通过Service完成
  */
