@@ -106,6 +106,16 @@ public class MainActivity extends AppCompatActivity {
                 sendBroadcast(intent);
             }
         });
+
+        findViewById(R.id.bt_task3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName("nim.shs1330.netease.com.plugintwp",
+                        "nim.shs1330.netease.com.plugintwp.PluginService"));
+                startService(intent);
+            }
+        });
     }
 
 

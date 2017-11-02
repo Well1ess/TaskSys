@@ -19,6 +19,10 @@ public class ApplicationInit {
     private static final String TAG = "ApplicationInit";
     private static Map<String, Application> sApplication = new HashMap<>();
 
+    public static Application getPluginApplication(String packageName){
+        return sApplication.get(packageName);
+    }
+
     public static void CreatePluginApplication(String packageName) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
 
         Object loadedApk = ClassLoaderHelper.getLoadedApk(packageName);

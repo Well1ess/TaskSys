@@ -10,7 +10,7 @@ public class StubService extends Service {
 
     @Override
     public void onStart(Intent intent, int startId) {
-        ServiceManager.getInstance().onStart(intent);
+        ServiceManager.getInstance().onStart(intent, startId);
         super.onStart(intent, startId);
     }
 
