@@ -45,4 +45,5 @@ package nim.shs1330.netease.com.tasksys;
  * Service的实例在start方式下只调用一次，而且Service有可能会在一个新的进程中，这导致Activity和Servicehook机制不能通用的原因
  * 具体我们自己保存一个map来模仿startService，我们在AndroidManifest里面生命五个不同进程的Service和一个ProxyService，所有Service
  * 的启动通过Service完成
+ *
  */
