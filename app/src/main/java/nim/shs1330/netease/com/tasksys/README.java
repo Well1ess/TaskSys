@@ -34,10 +34,10 @@ package nim.shs1330.netease.com.tasksys;
  * Host和Plugin全部都依赖于这个lib Interface，
  * 当host的intent进行startActivity的时候，注入其他extra的信息，在proxyActivity的onCreate方法里面接受到该intent，
  * 随后引入DLManager处理，在此manager中处理插件activity的启动数据注入等。
- *
+ * <p>
  * 2017年10月31日14:06:27
  * 在插件中用host的context注册广播就可正常接收信息
- *
+ * <p>
  * 2017年11月1日10:46:03
  * Activity和Service有很多相同点也有很多不同点
  * 他们都是四大组件，都通过AMS管理生命周期，但是Activity的生命周期由用户触发，由系统管理，Service的生命周期一般由我们代码控制，
