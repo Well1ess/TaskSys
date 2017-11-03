@@ -45,5 +45,13 @@ package nim.shs1330.netease.com.tasksys;
  * Service的实例在start方式下只调用一次，而且Service有可能会在一个新的进程中，这导致Activity和Servicehook机制不能通用的原因
  * 具体我们自己保存一个map来模仿startService，我们在AndroidManifest里面生命五个不同进程的Service和一个ProxyService，所有Service
  * 的启动通过Service完成
- *
+ * <p>
+ * 2017年11月3日13:21:30
+ * BroadcastReceiver IIntentReceiver 注入到AMS，Intent的匹配也是在AMS中，然后回调IntentReceiver的方法，发送至handler进行调用
+ * Toast TN 注入到INotificationManager， 经过验证如Context的验证等，通过TN回调本地WindowsManager
+ * bindService 是{@link android.content.ContextWrapper}的方法，这是个装饰者模式，里面的方法直接调用我们attach的Context
+ * 在这里面将我们的ServiceConnection封装成一个IServiceConnection（Binder），交给AMS，AMS经过一系列人验证通过app.thread
+ * IPC至本地进程完成Service的创建。这是如果Service不再同一个进程先fork一个进程在进行创建，之后再app.thread里面IPC通知AMS
+ * Service已经创建完成，然后AMS再次通过IPC app.thread进行bind，这时调用Service的onBind方法并将此binder发送給AMS，AMS通过IPC
+ * 调用IServiceConnection，并将IBinder对象发送给本地，这样本地和远程服务就建立了联系。
  */
