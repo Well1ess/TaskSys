@@ -54,4 +54,5 @@ package nim.shs1330.netease.com.tasksys;
  * IPC至本地进程完成Service的创建。这是如果Service不再同一个进程先fork一个进程在进行创建，之后再app.thread里面IPC通知AMS
  * Service已经创建完成，然后AMS再次通过IPC app.thread进行bind，这时调用Service的onBind方法并将此binder发送給AMS，AMS通过IPC
  * 调用IServiceConnection，并将IBinder对象发送给本地，这样本地和远程服务就建立了联系。
+ *
  */
