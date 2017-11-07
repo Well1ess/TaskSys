@@ -60,4 +60,17 @@ package nim.shs1330.netease.com.tasksys;
  * AMS的installProvider本地和远程执行不同的代码，远程执行newInstance，holder和provider都为空，之后通过AMS的publish方法返回给本地进程，holder和
  * provider都不为空，直接保存到本地
  *
+ * 2017年11月7日09:31:33
+ * 在Activity中调用{@link android.app.Activity#getContentResolver()}方法事实上是是调用ContextImpl的方法，获取到ContentResolver
+ * ContentResolver是一个抽象类，他在ContextImpl的具体实现是ApplicationContentResolver，我们获取ContentProvider最终会调用它的
+ * acquireProvider方法，这个方法又会调用ActivityThread的acquireProvider方法。
+ * 在ActivityThread中首先查找本地进程是否已经存在该ContentProvider，如果已经存在这直接返回，否则通过ActivityManagerService进行
+ * 远程唤醒。调用AMS的getContentProvider方法，这个方法中先判断是否有缓存，如果没有在进行远程唤醒。
+ * 如果没有唤醒判断该进程是否已经唤醒getProcessRecordLocked如果不为空则通过ApplicationThread的scheduleInstallProvider进行远程安装，
+ * 然后调用ActivityThread的installContentProviders方法随后调用installProvider方法完成安装，最后调用AMS的publishContentProviders
+ * 将此ContentProvider进行发布。
+ * 如果该进程没有被唤醒则即getProcessRecordLocked方法返回空，则调用startProcessLocked启动一个进程，通过ActivityThread#main方法
+ * ActivityThread#attach方法，AMS#attachApplication方法在此方法会回调ApplicationThread的bindApplication方法，这个方法通过H
+ * (handler)调用ActivityThread的bindApplication方法，随后调用installContentProviders完成安装，然后进行发布
+ *
  */
