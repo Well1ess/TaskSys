@@ -59,4 +59,5 @@ package nim.shs1330.netease.com.tasksys;
  * ContentProvider的获取和IContentProvider
  * AMS的installProvider本地和远程执行不同的代码，远程执行newInstance，holder和provider都为空，之后通过AMS的publish方法返回给本地进程，holder和
  * provider都不为空，直接保存到本地
+ *
  */
