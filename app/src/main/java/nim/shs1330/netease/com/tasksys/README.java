@@ -46,6 +46,7 @@ package nim.shs1330.netease.com.tasksys;
  * 具体我们自己保存一个map来模仿startService，我们在AndroidManifest里面生命五个不同进程的Service和一个ProxyService，所有Service
  * 的启动通过Service完成
  * <p>
+ *
  * 2017年11月3日13:21:30
  * BroadcastReceiver IIntentReceiver 注入到AMS，Intent的匹配也是在AMS中，然后回调IntentReceiver的方法，发送至handler进行调用
  * Toast TN 注入到INotificationManager， 经过验证如Context的验证等，通过TN回调本地WindowsManager
