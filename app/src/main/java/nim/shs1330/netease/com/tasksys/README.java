@@ -79,4 +79,7 @@ package nim.shs1330.netease.com.tasksys;
  * 的时候没有要install的provider，因为现在进程已经启动调用他的scheduleInstallProvider方法完成本地安装，
  * 而未启动的时候，我将要启动的provider封装到一个Intent里面，在handleBindApplication里面检测到非空，进行
  * 安装
+ *
+ * 2017年11月9日13:04:04
+ * Binder Driver
  */
