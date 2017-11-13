@@ -88,4 +88,5 @@ package nim.shs1330.netease.com.tasksys;
  * 每一个进程都会调用其main方法，创建ApplicationThread吗，每个进程都有主线程
  *
  * 新版的StartService方法创建进程及之后回调创建Service，或者直接在本进程创建Service的相关逻辑放在ActiveServices * 这个类里面
+ *
  */
