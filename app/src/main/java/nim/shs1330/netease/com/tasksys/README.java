@@ -82,4 +82,10 @@ package nim.shs1330.netease.com.tasksys;
  *
  * 2017年11月9日13:04:04
  * Binder Driver
+ *
+ * 2017年11月13日10:52:56
+ * SystemService.java 完成对AMS的初始化，并通过ServiceManager.addService添加到SM中
+ * 每一个进程都会调用其main方法，创建ApplicationThread吗，每个进程都有主线程
+ *
+ * 新版的StartService方法创建进程及之后回调创建Service，或者直接在本进程创建Service的相关逻辑放在ActiveServices * 这个类里面
  */
