@@ -96,4 +96,9 @@ package nim.shs1330.netease.com.tasksys;
  * ApplicationThread找到我们，随后在AMS中第一步先调用bindApplication方法完成本地进程的Instrumentation的初始化
  * 完成Application的初始化，installContentProvider，随后AMS里面检查是否有要启动的Activity，通过ActivityStackSupervisor完成realStartActivity，
  * 检查是否有要启动的Service，通过ActiveServices的realStartService创建Service
+ *
+ * 2017年11月15日09:59:21 Application
+ * 主线程中的application对象是在handleBindApplication方法中通过LoadedApk的方法创建，LoadedApk对象唯一。
+ * 插件中的Application对象显然不是在handleBindApplication方法生成，是在第一个Activity被生成之后，生成的，之后
+ * 调用它的onCreate方法，但是也是通过LoadedApk生成的，故只能生成一次。
  */
