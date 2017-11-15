@@ -89,4 +89,11 @@ package nim.shs1330.netease.com.tasksys;
  *
  * 新版的StartService方法创建进程及之后回调创建Service，或者直接在本进程创建Service的相关逻辑放在ActiveServices * 这个类里面
  *
+ *
+ * 2017年11月15日09:31:11 main启动过程
+ * app启动的时候先执行main方法，完成MainLooper的初始化，完成mainHandler的初始化，new出来ActivityThread
+ * ，接着调用它的attach方法，将本地进程的入口——ApplicationThread注册进AMS，这样其他进程就可以通过AMS里面的
+ * ApplicationThread找到我们，随后在AMS中第一步先调用bindApplication方法完成本地进程的Instrumentation的初始化
+ * 完成Application的初始化，installContentProvider，随后AMS里面检查是否有要启动的Activity，通过ActivityStackSupervisor完成realStartActivity，
+ * 检查是否有要启动的Service，通过ActiveServices的realStartService创建Service
  */
