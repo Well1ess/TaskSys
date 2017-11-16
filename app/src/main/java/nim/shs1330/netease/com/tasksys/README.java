@@ -103,6 +103,7 @@ package nim.shs1330.netease.com.tasksys;
  * 调用它的onCreate方法，但是也是通过LoadedApk生成的，故只能生成一次。
  *
  * 2017年11月16日09:47:55 Activity启动
+ *
  * Launcher也就是桌面事实上也是一个App，从桌面点击一个图标进入app，是从Launcher这个Activity经历了一次Activity的启动。
  * 点击之后onClickListener以New Task的方式调用startActivityForResult，之后调用AMS的startActivity，在AMS里面有ActivityStackSupervisor，
  * 进行权限验证等，然后通过调用Launcher的ApplicationThread的schedulePauseActivity暂停上一个Activity即Launcher，在Launcher进程里面，通过
