@@ -103,7 +103,6 @@ package nim.shs1330.netease.com.tasksys;
  * 调用它的onCreate方法，但是也是通过LoadedApk生成的，故只能生成一次。
  *
  * 2017年11月16日09:47:55 Activity启动
- *
  * Launcher也就是桌面事实上也是一个App，从桌面点击一个图标进入app，是从Launcher这个Activity经历了一次Activity的启动。
  * 点击之后onClickListener以New Task的方式调用startActivityForResult，之后调用AMS的startActivity，在AMS里面有ActivityStackSupervisor，
  * 进行权限验证等，然后通过调用Launcher的ApplicationThread的schedulePauseActivity暂停上一个Activity即Launcher，在Launcher进程里面，通过
@@ -111,4 +110,7 @@ package nim.shs1330.netease.com.tasksys;
  * 是否已经启动，因为是mainActivity，所以调用其ActivityThread的main方法，attach方法，再调用AMS的attachApplication方法，在attachApplication
  * 里面检查当前进程是否有要启动的Activity若有则通过ActivityStackSupervisor的attachApplicationLocked启动；检查当前进程是否有要启动的Service，若有则通过
  * ActiveServices的attachApplicationLocked方法完成Service启动。
+ *
+ * 同App里启动Activity和上述类似只是app.thread.schedulePauseActivity调用的是自己进程的方法。而且当前进程已经启动即ProcessRecord不为空，直接调用
+ * ActivityStackSupervisor的realStartActivityLocked，调用app.thread.scheduleLaunchActivity。
  */
