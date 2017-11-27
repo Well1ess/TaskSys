@@ -95,11 +95,13 @@ package nim.shs1330.netease.com.tasksys;
  * ，接着调用它的attach方法，将本地进程的入口——ApplicationThread注册进AMS，这样其他进程就可以通过AMS里面的
  * ApplicationThread找到我们，随后在AMS中第一步先调用bindApplication方法完成本地进程的Instrumentation的初始化
  * 完成Application的初始化，installContentProvider，随后AMS里面检查是否有要启动的Activity，通过ActivityStackSupervisor完成realStartActivity，
- * 检查是否有要启动的Service，通过ActiveServices的realStartService创建Service
+ * 检查是否有要启动的Service，通过ActiveServices的realStartService创建Service，
+ * 在performLaunchActivity时，通过LoadedApk获取当前LoadedApk的Application，通过Activity的Attach方法，将此App和Context传入。
  *
  * 2017年11月15日09:59:21 Application
  * 主线程中的application对象是在handleBindApplication方法中通过LoadedApk的方法创建，LoadedApk对象唯一。
- * 插件中的Application对象显然不是在handleBindApplication方法生成，是在第一个Activity被生成之后，生成的，之后
+ * 插件中的Application对象显然不是在handleBindApplication方法生成，是在第一个Activity被生成之后，生成的，《因为插件和宿主在同一个进程当中
+ * 不存在startProcess调用main方法调用AMS.attachApplication,也就不存在跨进程app.thread.bindApplication》,之后
  * 调用它的onCreate方法，但是也是通过LoadedApk生成的，故只能生成一次。
  *
  * 2017年11月16日09:47:55 Activity启动
@@ -107,9 +109,9 @@ package nim.shs1330.netease.com.tasksys;
  * 点击之后onClickListener以New Task的方式调用startActivityForResult，之后调用AMS的startActivity，在AMS里面有ActivityStackSupervisor，
  * 进行权限验证等，然后通过调用Launcher的ApplicationThread的schedulePauseActivity暂停上一个Activity即Launcher，在Launcher进程里面，通过
  * token，完成对特定Pause的停用之后通过AMS的activityPaused告知AMS特定的Activity已经停用，新的Activity可以启动，AMS检查要启动的Activity的ProcessRecord
- * 是否已经启动，因为是mainActivity，所以调用其ActivityThread的main方法，attach方法，再调用AMS的attachApplication方法，在attachApplication
- * 里面检查当前进程是否有要启动的Activity若有则通过ActivityStackSupervisor的attachApplicationLocked启动；检查当前进程是否有要启动的Service，若有则通过
- * ActiveServices的attachApplicationLocked方法完成Service启动。
+ * 是否已经启动，因为是mainActivity，所以调用其ActivityThread的main方法，attach方法，再调用AMS的attachApplication方法，在AMS的attachApplication
+ * 里面通过IApplicationThread完成Instrumentation的创建，完成application的创建，检查当前进程是否有要启动的Activity若有则通过ActivityStackSupervisor
+ * 的attachApplicationLocked启动；检查当前进程是否有要启动的Service，若有则通过ActiveServices的attachApplicationLocked方法完成Service启动。
  *
  * 同App里启动Activity和上述类似只是app.thread.schedulePauseActivity调用的是自己进程的方法。而且当前进程已经启动即ProcessRecord不为空，直接调用
  * ActivityStackSupervisor的realStartActivityLocked，调用app.thread.scheduleLaunchActivity。
