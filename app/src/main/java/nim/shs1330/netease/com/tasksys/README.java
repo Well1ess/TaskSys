@@ -115,4 +115,8 @@ package nim.shs1330.netease.com.tasksys;
  *
  * 同App里启动Activity和上述类似只是app.thread.schedulePauseActivity调用的是自己进程的方法。而且当前进程已经启动即ProcessRecord不为空，直接调用
  * ActivityStackSupervisor的realStartActivityLocked，调用app.thread.scheduleLaunchActivity。
+ *
+ * 2017年11月28日14:25:12
+ * 在AMS和app.thread中间的调用过程：权限验证，AMS中启动Activity都是通过ActivityStarter这个类进行，ActivityStackSupervisor起到监管AS的作用，
+ * 真正工作的是ActivityStack#startPausingLocked(),老版本代码直接调用AS不安全，现在在AS方法中将业务代码分发至ASSupervisor中。
  */
