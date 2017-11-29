@@ -130,4 +130,7 @@ package nim.shs1330.netease.com.tasksys;
  * 之后再app.thread里面回调AMS告诉其特定token的Activity已经暂停在ASM里面调用ActivityStack#activityPausedLocked方法，
  * 之后调用ActivityStack#completePauseLocked方法，调用ActivityStack#resumeTopActivityUncheckedLocked的方法，
  * 调用ActivityStackSupervisor#startSpecificActivityLocked方法，完成Activity或者Process的创建。
+ *
+ * 2017年11月29日11:11:58
+ * Android中Task是一个非常特殊的感念，既可以是同一个进程又可以是不同进程。
  */
