@@ -119,4 +119,15 @@ package nim.shs1330.netease.com.tasksys;
  * 2017年11月28日14:25:12
  * 在AMS和app.thread中间的调用过程：权限验证，AMS中启动Activity都是通过ActivityStarter这个类进行，ActivityStackSupervisor起到监管AS的作用，
  * 真正工作的是ActivityStack#startPausingLocked(),老版本代码直接调用AS不安全，现在在AS方法中将业务代码分发至ASSupervisor中。
+ *
+ * 2017年11月29日09:35:17 Activity启动过程
+ * Instrumentation#execuStartActivity调用AMS#startActivity，在AMS中启动Activity的业务逻辑全部放在ActivityStarter里面，
+ * 调用ActivityStarter的startActivityMayWait方法，因为有可能要创建进程，之后调用startActivityLocked方法，之后调用自己的
+ * startActivityUnchecked方法，之后调用ActivityStack#startActivityLocked方法完成准备，再在
+ * ActivityStarter#startActivityUnchecked方法里面调用ActivityStackSupervisior#resumeFocusedStackTopActivityLocked,暂停
+ * 上一个Activity，调用ActivityStack#resumeTopActivityUncheckedLocked的方法，接着调用ActivityStack#resumeTopActivityInnerLocked
+ * 方法，在其里面调用ActivityStack#startPausingLocked之后通过app.thread.schedulePauseActivity放法完成暂停，
+ * 之后再app.thread里面回调AMS告诉其特定token的Activity已经暂停在ASM里面调用ActivityStack#activityPausedLocked方法，
+ * 之后调用ActivityStack#completePauseLocked方法，调用ActivityStack#resumeTopActivityUncheckedLocked的方法，
+ * 调用ActivityStackSupervisor#startSpecificActivityLocked方法，完成Activity或者Process的创建。
  */
