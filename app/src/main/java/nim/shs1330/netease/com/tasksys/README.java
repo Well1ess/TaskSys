@@ -128,7 +128,7 @@ package nim.shs1330.netease.com.tasksys;
  * 上一个Activity，调用ActivityStack#resumeTopActivityUncheckedLocked的方法，接着调用ActivityStack#resumeTopActivityInnerLocked
  * 方法，在其里面调用ActivityStack#startPausingLocked之后通过app.thread.schedulePauseActivity放法完成暂停，
  * 之后再app.thread里面回调AMS告诉其特定token的Activity已经暂停在ASM里面调用ActivityStack#activityPausedLocked方法，
- * 之后调用ActivityStack#completePauseLocked方法，调用ActivityStack#resumeTopActivityUncheckedLocked的方法，
+ * 之后调用ActivityStack#requestFinishActivityLocked,ActivityStack#completePauseLocked方法，调用ActivityStack#resumeTopActivityUncheckedLocked的方法，
  * 调用ActivityStackSupervisor#startSpecificActivityLocked方法，完成Activity或者Process的创建。
  *
  * 2017年11月29日11:11:58
