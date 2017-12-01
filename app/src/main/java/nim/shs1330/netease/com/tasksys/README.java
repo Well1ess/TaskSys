@@ -132,6 +132,11 @@ package nim.shs1330.netease.com.tasksys;
  * 调用ActivityStackSupervisor#startSpecificActivityLocked方法，完成Activity或者Process的创建。
  *
  * 2017年11月29日11:11:58
- *
  * Android中Task是一个非常特殊的感念，既可以是同一个进程又可以是不同进程。
+ *
+ * 2017年12月1日10:22:33
+ * Android registerReceiver 是一次IPC过程，本地进程调用AMS进程，传输IIntentReceiver
+ * Android sendBroadcast 是两次IPC过程，本地进程传输Intent给AMS，AMS将其放到自己的消息队列中让自己的Handler调用，
+ * 之后再Handler中，获取ReceiverFilter，循环调用，转至本地进程，封装Args（Runnable）发送至MainThreadHandler，在里面调用
+ * {@link android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)}
  */
