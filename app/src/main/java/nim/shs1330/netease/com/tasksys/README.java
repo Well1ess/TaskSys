@@ -139,4 +139,10 @@ package nim.shs1330.netease.com.tasksys;
  * Android sendBroadcast 是两次IPC过程，本地进程传输Intent给AMS，AMS将其放到自己的消息队列中让自己的Handler调用，
  * 之后再Handler中，获取ReceiverFilter，循环调用，转至本地进程，封装Args（Runnable）发送至MainThreadHandler，在里面调用
  * {@link android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)}
+ *
+ * 2017年12月4日10:30:35
+ * Activity、Service和ContextImpl是Context的子类，在Activity中真正供我们使用的时候mBase，它是ContextImpl的实例，
+ * 在performLaunchActivity方法创建Activity之后，将其attach进Activity，在创建ContextImpl时还会调用其setOuterContext
+ * 将Activity或者Service传入。
+ * 创建Activity，创建ContextImpl，将ActivitySet入ContextImpl，将ContextImplAttach入Activity，双向持有
  */
