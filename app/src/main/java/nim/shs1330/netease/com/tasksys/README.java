@@ -145,4 +145,14 @@ package nim.shs1330.netease.com.tasksys;
  * 在performLaunchActivity方法创建Activity之后，将其attach进Activity，在创建ContextImpl时还会调用其setOuterContext
  * 将Activity或者Service传入。
  * 创建Activity，创建ContextImpl，将ActivitySet入ContextImpl，将ContextImplAttach入Activity，双向持有
+ *
+ * 2017年12月7日10:55:00 bindService
+ * {@link android.content.Context#bindService(android.content.Intent, android.content.ServiceConnection, int)}
+ * 传递一个ServiceConnection的本地对象，在这个方法中，封装一层LoadedApk.ServiceDispatcher对象，其内部有一个IConnectionService
+ * 是个Binder对象用于跨进程，然后调用AMS的方法，并将ICS传递过去，在AMS中调用app.thread的方法完成特定Service的创建，即调用
+ * {@link android.app.Service#onCreate()}方法，然后返回AMS进程，之后通过Service所在进程的app.thread
+ * 调用{@link android.app.Service#onBind(android.content.Intent)}方法，向Service要一个Binder对象，返回给AMS，AMS通过ConnectRecord
+ * 调用IConnectService通过IPC调用本地的ServiceDispatcher里的方法，这个方法中封装一个RunConnected对象供MainHandler调用，
+ * 调用RunConnected方法，其调用{@link android.content.ServiceConnection#onServiceConnected(android.content.ComponentName, android.os.IBinder)}
+ * 方法。
  */
