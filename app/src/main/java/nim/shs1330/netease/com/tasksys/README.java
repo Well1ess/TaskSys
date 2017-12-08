@@ -155,4 +155,12 @@ package nim.shs1330.netease.com.tasksys;
  * 调用IConnectService通过IPC调用本地的ServiceDispatcher里的方法，这个方法中封装一个RunConnected对象供MainHandler调用，
  * 调用RunConnected方法，其调用{@link android.content.ServiceConnection#onServiceConnected(android.content.ComponentName, android.os.IBinder)}
  * 方法。
+ *
+ * 2017年12月8日09:46:08 bindService
+ * -IPC->AMS#bindService,ActiveServices#bringUpServiceLocked(),-IPC->realStartServiceLocked or startProcessLocked
+ * ,-IPC->requestServiceBindingsLocked-IPC->AMS#publishService-IPC->LoadedApk.ServiceDispatcher.InnerConnection#connected
+ * 方法，ServiceDispatcher#connected,调用onServiceConnection
+ *
+ * 2017年12月8日10:52:42 StartProcess
+ * 新进程创建一个线程池不断talkWithDriver，获取Client发送的消息，
  */
