@@ -162,5 +162,5 @@ package nim.shs1330.netease.com.tasksys;
  * 方法，ServiceDispatcher#connected,调用onServiceConnection
  *
  * 2017年12月8日10:52:42 StartProcess
- * 新进程创建一个线程池不断talkWithDriver，获取Client发送的消息，
+ * 新进程创建一个线程池不断talkWithDriver，获取Client发送的消息，等待链接
  */
