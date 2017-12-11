@@ -163,4 +163,8 @@ package nim.shs1330.netease.com.tasksys;
  *
  * 2017年12月8日10:52:42 StartProcess
  * 新进程创建一个线程池不断talkWithDriver，获取Client发送的消息，等待链接
+ *
+ * 2017年12月11日10:16:57
+ * 创建进程时最重要的两个方法ZygoteInit完成native调用实现线程池的初始化
+ * invokeStaticMain完成Application的初始化
  */
