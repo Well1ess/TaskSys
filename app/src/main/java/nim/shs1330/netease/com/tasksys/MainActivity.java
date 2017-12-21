@@ -117,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
                 startService(intent);
             }
         });
+
+        thread.start();
     }
 
 
@@ -143,5 +145,13 @@ public class MainActivity extends AppCompatActivity {
         public void dispatchMessage(Message msg) {
             super.dispatchMessage(msg);
         }
+    };
+
+    public Thread thread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+        }
+    }){
+
     };
 }
