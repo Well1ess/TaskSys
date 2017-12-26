@@ -20,7 +20,6 @@ import java.lang.reflect.Method;
 
 import nim.shs1330.netease.com.tasksys.binder.Component;
 import nim.shs1330.netease.com.tasksys.binder.ComponentNative;
-import nim.shs1330.netease.com.tasksys.dynamic_hook.activity.TargetActivity;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.classloader.ClassLoaderHelper;
 
 /**
@@ -50,7 +49,23 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_showTask).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, TargetActivity.class));
+                //startActivity(new Intent(MainActivity.this, TargetActivity.class));
+                try {
+                    Class helloC = ClassLoaderHelper.sDexClassloader.loadClass("Hello");
+                    Method myPrintM = helloC.getDeclaredMethod("MyPrint", String.class);
+                    myPrintM.invoke(null, "zhang !!");
+
+                    Method mainM = helloC.getDeclaredMethod("main", String[].class);
+                    mainM.invoke(null, new Object[]{ new String[]{"String"}});
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -72,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 StubFragment stubFragment = null;
                 try {
                     ClassLoader classLoader = ClassLoaderHelper.getPluginClassLoader("nim.shs1330.netease.com.plugintwp");
-                    Class fragmentClazz =  classLoader.loadClass("nim.shs1330.netease.com.plugintwp.MainFragment");
+                    Class fragmentClazz = classLoader.loadClass("nim.shs1330.netease.com.plugintwp.MainFragment");
                     fragment = (Fragment) fragmentClazz.newInstance();
 
                     stubFragment = new StubFragment();
@@ -151,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
         }
-    }){
+    }) {
 
     };
 }

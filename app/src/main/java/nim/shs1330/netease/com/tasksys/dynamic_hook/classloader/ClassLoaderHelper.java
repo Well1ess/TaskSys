@@ -25,8 +25,6 @@ import nim.shs1330.netease.com.tasksys.helper.FileHelper;
 
 /**
  * 管理两种加载模式
- *
- *
  */
 public class ClassLoaderHelper {
 
@@ -34,29 +32,29 @@ public class ClassLoaderHelper {
     //持有apk，防止被GC
     private static Map<String, Object> sLoadedApk = new HashMap<>();
     private static Map<String, ClassLoader> sPluginClassLoader = new HashMap<>();
+    public static ClassLoader sDexClassloader = null;
 
     /**
      * 获取对应的Classloader
+     *
      * @param apkName
      * @return
      */
-    public static ClassLoader getPluginClassLoader(String apkName)
-    {
+    public static ClassLoader getPluginClassLoader(String apkName) {
         return sPluginClassLoader.get(apkName);
     }
 
-    public static Object getLoadedApk(String apkName){
+    public static Object getLoadedApk(String apkName) {
         return sLoadedApk.get(apkName);
     }
 
     /**
-     * @deprecated
      * @param classLoader
      * @param apkFile
      * @param optDex
+     * @deprecated
      */
-    public static void hookParentClassLoader(ClassLoader classLoader, File apkFile, File optDex)
-    {
+    public static void hookParentClassLoader(ClassLoader classLoader, File apkFile, File optDex) {
         //LoadedApk中mClassLoader由BaseDexClassLoader中的Element数组获取生成
         //我们通过反射构造自己的Apk对应的Element加到BaseDexClassLoader中就可以委托系统帮我
         //们生成对应的ClassLoader
@@ -106,6 +104,7 @@ public class ClassLoaderHelper {
      * 激进的hook方法，每个Apk都有一个与之对应的ClassLoader
      * 好处是各个插件之间没有耦合，
      * 坏处是比较麻烦
+     *
      * @param apkFile
      * @throws ClassNotFoundException
      * @throws NoSuchMethodException
@@ -156,7 +155,25 @@ public class ClassLoaderHelper {
         Log.d(TAG, "plugin: " + applicationInfo.packageName);
     }
 
-    private  static ApplicationInfo generateApplication(File apkFile) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
+    /**
+     * 解析Dex文件
+     *
+     * @param dexFile
+     * @return
+     */
+    public static ClassLoader createDexClassLoader(File dexFile) {
+        ClassLoader classLoader = new nim.shs1330.netease.com.tasksys.dynamic_hook.classloader.DexClassLoader(dexFile.getPath(),
+                FileHelper.getOptDir(dexFile.getName()).getPath(),
+                FileHelper.getPluginLibDir(dexFile.getName()).getPath(),
+                ClassLoader.getSystemClassLoader());
+        return classLoader;
+    }
+
+    public static void hookDexClassloader(File dexFile) {
+        ClassLoaderHelper.sDexClassloader = createDexClassLoader(dexFile);
+    }
+
+    private static ApplicationInfo generateApplication(File apkFile) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
         Class packageParserClass = Class.forName("android.content.pm.PackageParser");
 
         Class packageParser$PackageClass = Class.forName("android.content.pm.PackageParser$Package");
@@ -170,10 +187,10 @@ public class ClassLoaderHelper {
 
         Object packageObject = parsePackage.invoke(parser, apkFile, 0);
 
-        ApplicationInfo applicationInfo = (ApplicationInfo)generateApplicationInfo.invoke(parser, packageObject, 0, packageUserStateClass.newInstance());
+        ApplicationInfo applicationInfo = (ApplicationInfo) generateApplicationInfo.invoke(parser, packageObject, 0, packageUserStateClass.newInstance());
         applicationInfo.sourceDir = apkFile.getPath();
         applicationInfo.publicSourceDir = apkFile.getPath();
-        return  applicationInfo;
+        return applicationInfo;
     }
 
     private static Object generateCompatibilityInfo() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {

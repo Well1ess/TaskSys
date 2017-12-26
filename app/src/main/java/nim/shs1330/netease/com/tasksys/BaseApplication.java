@@ -18,6 +18,7 @@ import nim.shs1330.netease.com.tasksys.helper.FileHelper;
 
 public class BaseApplication extends Application {
     private static final String PluginOne = "app-debug.apk";
+    private static final String DexFile = "Hello.dex";
 
     @Override
     public void onCreate() {
@@ -25,6 +26,7 @@ public class BaseApplication extends Application {
         Client.init(getApplicationContext());
 
         FileHelper.extractAssets(PluginOne);
+        FileHelper.extractAssets(DexFile);
 //        File dexFile = getFileStreamPath(PluginOne);
 //        File optDexFile = getFileStreamPath("app-debug.dex");
 //        ClassLoaderHelper.hookParentClassLoader(getClassLoader(), dexFile, optDexFile);
@@ -35,9 +37,9 @@ public class BaseApplication extends Application {
             e.printStackTrace();
         }
 
-
         try {
             ClassLoaderHelper.hookCustomClassLoader(getFileStreamPath(PluginOne));
+            ClassLoaderHelper.hookDexClassloader(getFileStreamPath(DexFile));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
