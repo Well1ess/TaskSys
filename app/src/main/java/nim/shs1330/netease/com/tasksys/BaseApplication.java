@@ -38,6 +38,8 @@ public class BaseApplication extends Application {
             e.printStackTrace();
         }
 
+
+
         try {
             ClassLoaderHelper.hookCustomClassLoader(getFileStreamPath(PluginOne));
             ClassLoaderHelper.hookDexClassloader(getFileStreamPath(DexFile));
