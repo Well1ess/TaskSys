@@ -2,6 +2,7 @@ package nim.shs1330.netease.com.tasksys;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -19,7 +20,7 @@ import nim.shs1330.netease.com.tasksys.helper.FileHelper;
 public class BaseApplication extends Application {
     private static final String PluginOne = "app-debug.apk";
     private static final String DexFile = "Hello.dex";
-
+    private static final String TAG = "BaseApplication";
     @Override
     public void onCreate() {
         super.onCreate();
