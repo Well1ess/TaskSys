@@ -19,14 +19,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_2"
             android:background="#FFFFFF"
-            android:text="显示"/>
+            android:text="AMS Hook"/>
         <Button
             android:id="@+id/bt_clear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_2"
             android:background="#FFFFFF"
-            android:text="清除"/>
+            android:text="Plugin 1"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -78,13 +78,15 @@
             android:text="怪物——————————————"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/bt_master1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_2"
             android:background="#FFFFFF"
-            android:text="怪物1"/>
+            android:text="怪物1" />
+
         <Button
             android:id="@+id/bt_master2"
             android:layout_width="match_parent"
@@ -99,6 +101,11 @@
             android:layout_margin="@dimen/dp_2"
             android:background="#FFFFFF"
             android:text="怪物3"/>
+        <FrameLayout
+            android:id="@+id/flyt_contrainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"></FrameLayout>
     </LinearLayout>
 
     <ScrollView
@@ -116,4 +123,5 @@
             android:textSize="16sp"
             android:text="asdasdasdasdasdasdasdasdasdasdas"/>
     </ScrollView>
+
 </LinearLayout>

@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by shs1330 on 2017/10/16.
- * 傀儡Activity用于绕过AMS的验证{@link ActivityManagerService}
+ * 傀儡Activity用于绕过AMS的验证{@linkActivityManagerService}
  */
 
 public class StubActivity extends AppCompatActivity {

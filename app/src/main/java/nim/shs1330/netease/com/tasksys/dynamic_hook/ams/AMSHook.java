@@ -9,7 +9,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+import nim.shs1330.netease.com.tasksys.dynamic_hook.service.StubService;
 import nim.shs1330.netease.com.tasksys.dynamic_hook.activity.StubActivity;
+import nim.shs1330.netease.com.tasksys.helper.Client;
 
 /**
  * Created by shs1330 on 2017/10/13.
@@ -55,6 +57,7 @@ import nim.shs1330.netease.com.tasksys.dynamic_hook.activity.StubActivity;
  */
 public class AMSHook implements InvocationHandler {
     public static final String TARGET_ACTIVITY = "TARGET_ACTIVITY";
+    public static final String TARGET_SERVICE = "TARGET_SERVICE";
     private static final String TAG = "AMSHook";
     private Object mBaseAms;
 
@@ -75,7 +78,6 @@ public class AMSHook implements InvocationHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        Log.d(TAG, method.getName());
         if (method.getName().equals("startActivity")) {
             Intent rawIntent = null;
             int index = 0;
@@ -95,6 +97,28 @@ public class AMSHook implements InvocationHandler {
             newIntent.putExtra(TARGET_ACTIVITY, rawIntent);
 
             args[index] = newIntent;
+        }
+
+        if (method.getName().equals("startService")) {
+            Intent rawIntent = null;
+            int index = 0;
+            for (int i = 0; i < args.length; i++) {
+                if (args[i] instanceof Intent) {
+                    rawIntent = (Intent) args[i];
+                    index = i;
+                    break;
+                }
+            }
+
+            Intent newIntent = new Intent();
+            String proxyPackageName = Client.getContext().getPackageName();
+
+            ComponentName componentName = new ComponentName(proxyPackageName, StubService.class.getName());
+            newIntent.setComponent(componentName);
+
+            newIntent.putExtra(TARGET_SERVICE, rawIntent);
+            args[index] = newIntent;
+
         }
         return method.invoke(mBaseAms, args);
     }

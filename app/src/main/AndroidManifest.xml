@@ -26,12 +26,18 @@
             android:name=".MainService"
             android:enabled="true"
             android:exported="true"
-            android:process=":second"></service>
+            android:process=":second" />
+
         <receiver android:name=".receiver.LaunchActivity">
             <intent-filter>
                 <action android:name="InvokeActivity" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".dynamic_hook.service.StubService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
