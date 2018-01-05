@@ -1,14 +1,18 @@
 package nim.shs1330.netease.com.tasksys;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import java.lang.reflect.Field;
 
 import nim.shs1330.netease.com.tasksys.binder.Component;
 import nim.shs1330.netease.com.tasksys.binder.ComponentNative;
@@ -17,15 +21,37 @@ import nim.shs1330.netease.com.tasksys.binder.ComponentNative;
  * Created by shs1330 on 2017/10/10.
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
     private Component component;
+
+    public AssetManager assetManager = null;
+    public Resources resources = null;
+
+    public MainActivity() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+        Class appC = Class.forName("nim.shs1330.netease.com.parserapkfromdex.ProxyApplication");
+        Field thatR = appC.getDeclaredField("thatR");
+        resources = (Resources) thatR.get(null);
+        assetManager = resources.getAssets();
+    }
+
+
+    @Override
+    public AssetManager getAssets() {
+        return assetManager == null ? super.getAssets() : assetManager;
+    }
+
+    @Override
+    public Resources getResources() {
+        return resources == null ? super.getResources() : resources;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate:  src MainActivity created");
+        Log.d(TAG, "2130968603 onCreate: " + R.layout.activity_main);
 //        bindService(new Intent(this, MainService.class), serviceConnection, BIND_AUTO_CREATE);
 //        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
 //            @Override
