@@ -58,8 +58,8 @@ package nim.shs1330.netease.com.tasksys;
  * <p>
  * 2017年11月6日10:46:51
  * ContentProvider的获取和IContentProvider
- * AMS的installProvider本地和远程执行不同的代码，远程执行newInstance，holder和provider都为空，之后通过AMS的publish方法返回给本地进程，holder和
- * provider都不为空，直接保存到本地
+ * AMS的installProvider本地和远程执行不同的代码，远程执行newInstance，holder和provider都为空，之后通过AMS的publish方法返回给本地进程
+ * ，holder和provider都不为空，直接保存到本地
  * <p>
  * 2017年11月7日09:31:33
  * 在Activity中调用{@link android.app.Activity#getContentResolver()}方法事实上是是调用ContextImpl的方法，获取到ContentResolver
@@ -110,8 +110,9 @@ package nim.shs1330.netease.com.tasksys;
  * 进行权限验证等，然后通过调用Launcher的ApplicationThread的schedulePauseActivity暂停上一个Activity即Launcher，在Launcher进程里面，通过
  * token，完成对特定Pause的停用之后通过AMS的activityPaused告知AMS特定的Activity已经停用，新的Activity可以启动，AMS检查要启动的Activity的ProcessRecord
  * 是否已经启动，因为是mainActivity，所以调用其ActivityThread的main方法，attach方法，再调用AMS的attachApplication方法，在AMS的attachApplication
- * 里面通过IApplicationThread完成Instrumentation的创建，完成application的创建，检查当前进程是否有要启动的Activity若有则通过ActivityStackSupervisor
- * 的attachApplicationLocked启动；检查当前进程是否有要启动的Service，若有则通过ActiveServices的attachApplicationLocked方法完成Service启动。
+ * 里面通过IApplicationThread调用bindApplication返回至新进程，完成Instrumentation的创建，完成application的创建，
+ * 之后返回AMS检查当前进程是否有要启动的Activity若有则通过ActivityStackSupervisor的attachApplicationLocked启动；
+ * 检查当前进程是否有要启动的Service，若有则通过ActiveServices的attachApplicationLocked方法完成Service启动。
  *
  * 同App里启动Activity和上述类似只是app.thread.schedulePauseActivity调用的是自己进程的方法。而且当前进程已经启动即ProcessRecord不为空，直接调用
  * ActivityStackSupervisor的realStartActivityLocked，调用app.thread.scheduleLaunchActivity。
@@ -128,8 +129,9 @@ package nim.shs1330.netease.com.tasksys;
  * 上一个Activity，调用ActivityStack#resumeTopActivityUncheckedLocked的方法，接着调用ActivityStack#resumeTopActivityInnerLocked
  * 方法，在其里面调用ActivityStack#startPausingLocked之后通过app.thread.schedulePauseActivity放法完成暂停，
  * 之后再app.thread里面回调AMS告诉其特定token的Activity已经暂停在ASM里面调用ActivityStack#activityPausedLocked方法，
- * 之后调用ActivityStack#requestFinishActivityLocked,ActivityStack#completePauseLocked方法，调用ActivityStack#resumeTopActivityUncheckedLocked的方法，
- * 调用ActivityStackSupervisor#startSpecificActivityLocked方法，完成Activity或者Process的创建。
+ * 之后调用ActivityStack#requestFinishActivityLocked,ActivityStack#completePauseLocked方法，
+ * 调用ActivityStack#resumeTopActivityUncheckedLocked的方法，调用ActivityStackSupervisor#startSpecificActivityLocked方法，
+ * 完成Activity或者Process的创建。
  *
  * 2017年11月29日11:11:58
  * Android中Task是一个非常特殊的感念，既可以是同一个进程又可以是不同进程。
@@ -142,8 +144,8 @@ package nim.shs1330.netease.com.tasksys;
  *
  * 2017年12月4日10:30:35
  * Activity、Service和ContextImpl是Context的子类，在Activity中真正供我们使用的时候mBase，它是ContextImpl的实例，
- * 在performLaunchActivity方法创建Activity之后，将其attach进Activity，在创建ContextImpl时还会调用其setOuterContext
- * 将Activity或者Service传入。
+ * 在performLaunchActivity方法创建Activity之后，将其创建出来（这时候持有从LoadedApk里传入的{@link android.content.res.Resources}），
+ * attach进Activity，在创建ContextImpl时还会调用其setOuterContext将Activity或者Service传入。
  * 创建Activity，创建ContextImpl，将ActivitySet入ContextImpl，将ContextImplAttach入Activity，双向持有
  *
  * 2017年12月7日10:55:00 bindService
